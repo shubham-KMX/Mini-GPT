@@ -74,7 +74,7 @@ def train(cfg: dict) -> None:
     print(f"Using device: {device}")
 
     # --- Data ---
-    text = load_text()
+    text = load_text(cfg["data"]) if cfg.get("data") else load_text()
     tokenizer = CharTokenizer(text)
     _, train_data, val_data = build_dataset(text, tokenizer)
     print(f"Vocab size: {tokenizer.vocab_size} | "
@@ -133,6 +133,9 @@ def parse_args() -> dict:
         p.add_argument(arg, type=type(val), default=val)
     p.add_argument("--gen-tokens", type=int, default=500,
                    help="How many characters to generate after training.")
+    p.add_argument("--data", type=str, default=None,
+                   help="Path to a text file to train on. "
+                        "Defaults to Tiny Shakespeare (input.txt).")
     return vars(p.parse_args())
 
 

@@ -41,7 +41,13 @@ TRAIN_SPLIT = 0.9  # fraction of data used for training (rest is validation)
 # 1. Fetching and inspecting the dataset
 # ---------------------------------------------------------------------------
 def load_text(path: str = DATA_PATH, url: str = DATA_URL) -> str:
-    """Return the raw Tiny Shakespeare text, downloading it once if needed."""
+    """Return the training text.
+
+    If `path` already exists (for example a prepared hinglish.txt), it is read
+    as-is. Otherwise the Tiny Shakespeare dataset is downloaded to `path`. This
+    lets the same pipeline train on any character-level corpus -- just point
+    `path` at your own text file.
+    """
     if not os.path.exists(path):
         print(f"Downloading Tiny Shakespeare to {path} ...")
         urllib.request.urlretrieve(url, path)
