@@ -21,12 +21,16 @@ IMPORTANT -- dataset id:
 
 Usage:
     pip install datasets
-    python prepare_hinglish.py                                   # ~5 MB -> hinglish.txt
+    python prepare_hinglish.py                                   # ~5 MB -> input.txt
     python prepare_hinglish.py --dataset <hf_dataset_id>         # if default fails
-    python prepare_hinglish.py --target-mb 3 --out mydata.txt    # smaller corpus
+    python prepare_hinglish.py --target-mb 3 --out mydata.txt    # smaller / custom file
 
-Then train on it:
-    python train.py --data hinglish.txt --block-size 256 --n-embd 256 \
+By default this OVERWRITES input.txt so the rest of the pipeline uses the
+Hinglish corpus automatically. Delete input.txt to get Shakespeare back (it
+re-downloads on the next run).
+
+Then train on it (no --data needed, since input.txt is the default corpus):
+    python train.py --block-size 256 --n-embd 256 \
         --n-head 6 --n-layer 6 --max-iters 5000
 
 Reference: L3Cube-HingCorpus, https://github.com/l3cube-pune/code-mixed-nlp
@@ -56,7 +60,11 @@ def clean_line(text: str) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build a Hinglish corpus from L3Cube-HingCorpus.")
-    parser.add_argument("--out", default="hinglish.txt", help="Output text file.")
+    # Default output is input.txt so the rest of the pipeline (data.py,
+    # train.py) picks up the Hinglish corpus with no extra flags. This
+    # overwrites any existing Shakespeare input.txt; if you later want
+    # Shakespeare back, just delete input.txt and it re-downloads automatically.
+    parser.add_argument("--out", default="input.txt", help="Output text file.")
     parser.add_argument("--target-mb", type=float, default=5.0,
                         help="Approximate output size in megabytes (default: 5).")
     parser.add_argument("--min-chars", type=int, default=15,
