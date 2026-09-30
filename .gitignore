@@ -1,0 +1,13 @@
+# Virtual environment
+.venv/
+
+# Downloaded dataset
+input.txt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Model checkpoints
+*.pt
+*.pth
